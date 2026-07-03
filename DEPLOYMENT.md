@@ -53,17 +53,25 @@ BACKEND_API_URL = "https://your-backend-service.onrender.com"
 BACKEND_TIMEOUT_SECONDS = "60"
 ```
 
+Streamlit Community Cloud runtime:
+
+```text
+python-3.11.9
+```
+
 Deployment flow:
 
 1. Deploy the backend on Render using [render.yaml](/abs/path/c:/Desktop new/RAG/render.yaml:1).
 2. In Streamlit Community Cloud, point the app to [app.py](/abs/path/c:/Desktop new/RAG/app.py:1).
 3. Add the values from [.streamlit/secrets.toml.example](/abs/path/c:/Desktop new/RAG/.streamlit/secrets.toml.example:1) to the Streamlit app secrets UI.
+4. Make sure Streamlit picks up [runtime.txt](/abs/path/c:/Desktop new/RAG/runtime.txt:1) so it uses Python 3.11.9.
 
 Notes:
 
 - The backend still exposes `/health`, `/query`, and document endpoints for the Streamlit app.
 - Render free web services currently spin down after inactivity and do not support persistent disks, so uploaded files on the free backend are not durable across spin-downs, restarts, or redeploys.
 - Streamlit Community Cloud reads the root `requirements.txt`, which is now trimmed to frontend-only dependencies.
+- This Python pin avoids slow or stuck source builds for older Streamlit/Numpy combinations during cloud deploys.
 
 ### Option 1: Docker + Kubernetes
 
