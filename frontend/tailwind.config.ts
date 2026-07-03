@@ -33,6 +33,7 @@ export default {
           700: "#3f3f46",
           800: "#27272a",
           900: "#18181b",
+          950: "#0f172a",
         },
         // Subtle accent for highlights
         accent: {
