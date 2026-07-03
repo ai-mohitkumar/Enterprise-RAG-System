@@ -11,7 +11,7 @@ RUN npm install
 COPY frontend/ .
 ENV NEXT_PUBLIC_API_URL=/ 
 RUN npm run build
-RUN npx next export -o /app/frontend-out
+RUN npx next export --outdir /app/frontend-out
 
 # Runtime image for FastAPI + static frontend
 FROM python:3.11-slim
