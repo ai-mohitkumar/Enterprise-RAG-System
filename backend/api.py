@@ -8,6 +8,7 @@ from uuid import uuid4
 from fastapi import FastAPI, File, UploadFile, HTTPException, Header
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from typing import Optional, List
 import logging
@@ -26,6 +27,13 @@ app = FastAPI(
     title="Production RAG System API",
     description="Enterprise-grade Retrieval-Augmented Generation API",
     version="1.0.0",
+)
+
+# Serve frontend static files when deployed together
+app.mount(
+    "/",
+    StaticFiles(directory="frontend-out", html=True),
+    name="frontend",
 )
 
 # CORS Configuration
