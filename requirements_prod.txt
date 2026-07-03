@@ -7,8 +7,8 @@ langchain-openai==0.0.7
 openai==1.12.0
 
 ## Vector Database
-pinecone-client==3.0.0
-milvus==2.3.0
+# The current backend uses an in-memory mock vector store, so managed
+# vector database clients are intentionally omitted from the deploy path.
 
 ## Document Processing
 pypdf==4.0.1
