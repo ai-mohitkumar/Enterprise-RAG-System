@@ -76,13 +76,13 @@ export const MessageItem: React.FC<MessageItemProps> = ({
               {message.citations.map((citation, idx) => (
                 <a
                   key={idx}
-                  href={citation}
+                  href={citation.source}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 px-2 py-1 bg-neutral-100 dark:bg-secondary-700 hover:bg-neutral-200 dark:hover:bg-secondary-600 rounded text-xs text-primary-600 dark:text-primary-400 transition-colors truncate"
-                  title={citation}
+                  title={citation.source}
                 >
-                  📄 {citation.split("/").pop()?.slice(0, 20)}
+                  📄 {citation.source.split("/").pop()?.slice(0, 20)}
                 </a>
               ))}
             </div>
@@ -90,21 +90,21 @@ export const MessageItem: React.FC<MessageItemProps> = ({
         )}
 
         {/* Confidence score */}
-        {message.confidence && !isUser && (
+        {message.confidence_score && !isUser && (
           <div className="flex items-center gap-2 mb-3 text-xs text-secondary-500 dark:text-neutral-400">
             <div className="flex-1 h-1.5 bg-neutral-200 dark:bg-secondary-700 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all ${
-                  message.confidence > 0.8
+                  message.confidence_score > 0.8
                     ? "bg-green-500"
-                    : message.confidence > 0.6
+                    : message.confidence_score > 0.6
                       ? "bg-yellow-500"
                       : "bg-orange-500"
                 }`}
-                style={{ width: `${message.confidence * 100}%` }}
+                style={{ width: `${message.confidence_score * 100}%` }}
               />
             </div>
-            <span>Confidence: {(message.confidence * 100).toFixed(0)}%</span>
+            <span>Confidence: {(message.confidence_score * 100).toFixed(0)}%</span>
           </div>
         )}
 

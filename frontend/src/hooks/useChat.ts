@@ -61,11 +61,13 @@ export const useChat = (options: UseChatOptions = {}) => {
           top_k: 5,
         });
 
-        // Convert response to message
-        const assistantMessage = chatService.convertToMessage(response);
-        setMessages((prev) => [...prev, assistantMessage]);
+          // Convert response to message
+          const assistantMessage = chatService.convertToMessage(response);
+          setMessages((prev) => [...prev, assistantMessage]);
 
-        onSuccess?.(assistantMessage);
+          onSuccess?.(assistantMessage);
+          // Return the assistant message for callers that await sendMessage
+          return assistantMessage;
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Failed to send message";

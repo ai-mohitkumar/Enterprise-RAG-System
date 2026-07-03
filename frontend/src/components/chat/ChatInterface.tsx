@@ -1,66 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { MessageList } from './MessageList';
-import { ChatInput } from './ChatInput';
-import { CitationPanel } from './CitationPanel';
-import { useChat } from '@/lib/hooks/useChat';
-import { Message, Citation } from '@/types';
+import { useEffect, useState } from "react";
+import { MessageList } from "./MessageList";
+import { ChatInput } from "./ChatInput";
+import { CitationPanel } from "./CitationPanel";
+import { useChat } from "@/hooks/useChat";
+import { Message, Citation } from "@/types";
 
 export function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { messages, loading, sendMessage } = useChat();
   const [citations, setCitations] = useState<Citation[]>([]);
   const [showCitations, setShowCitations] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const { sendMessage } = useChat();
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    // MessageList auto-scrolls to bottom; keep effect in case future side-effects needed
   }, [messages]);
 
   const handleSendMessage = async (content: string) => {
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content,
-      timestamp: new Date().toISOString(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setIsLoading(true);
-
     try {
-      const response = await sendMessage(content);
-
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response.answer,
-        timestamp: new Date().toISOString(),
-        citations: response.citations,
-        sources: response.sources,
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
-      setCitations(response.citations);
-      setShowCitations(true);
+      const assistantMessage = await sendMessage(content);
+      if (assistantMessage) {
+        setCitations(assistantMessage.citations || []);
+        setShowCitations((assistantMessage.citations || []).length > 0);
+      }
     } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date().toISOString(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+      console.error("Error sending message:", error);
     }
   };
 
@@ -68,22 +31,12 @@ export function ChatInterface() {
     <div className="flex h-full">
       <div className="flex-1 flex flex-col">
         <div className="flex-1 overflow-hidden">
-          <MessageList
-            messages={messages}
-            isLoading={isLoading}
-            messagesEndRef={messagesEndRef}
-          />
+          <MessageList messages={messages} loading={loading} />
         </div>
-        <ChatInput
-          onSendMessage={handleSendMessage}
-          disabled={isLoading}
-        />
+        <ChatInput onSubmit={handleSendMessage} disabled={loading} loading={loading} />
       </div>
       {showCitations && citations.length > 0 && (
-        <CitationPanel
-          citations={citations}
-          onClose={() => setShowCitations(false)}
-        />
+        <CitationPanel citations={citations} onClose={() => setShowCitations(false)} />
       )}
     </div>
   );

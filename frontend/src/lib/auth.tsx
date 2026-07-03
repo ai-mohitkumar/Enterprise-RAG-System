@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = localStorage.getItem('token');
     if (token) {
       // TODO: Validate token and get user info
-      setUser({ id: '1', email: 'user@example.com', name: 'User' });
+      setUser({ id: '1', username: 'user', email: 'user@example.com', role: 'user', created_at: new Date() });
     }
     setIsLoading(false);
   }, []);
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // TODO: Implement actual login API call
       const token = 'fake-token';
       localStorage.setItem('token', token);
-      setUser({ id: '1', email, name: email.split('@')[0] });
+      setUser({ id: '1', username: email.split('@')[0], email, role: 'user', created_at: new Date() });
     } catch (error) {
       throw error;
     } finally {
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // TODO: Implement actual register API call
       const token = 'fake-token';
       localStorage.setItem('token', token);
-      setUser({ id: '1', email, name });
+      setUser({ id: '1', username: name, email, role: 'user', created_at: new Date() });
     } catch (error) {
       throw error;
     } finally {
