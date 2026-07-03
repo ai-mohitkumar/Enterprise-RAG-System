@@ -11,7 +11,6 @@ RUN npm install
 COPY frontend/ .
 ENV NEXT_PUBLIC_API_URL=/ 
 RUN npm run build
-RUN npx next export --outdir /app/frontend-out
 
 # Runtime image for FastAPI + static frontend
 FROM python:3.11-slim
@@ -24,7 +23,7 @@ WORKDIR /app
 COPY requirements_prod.txt .
 RUN python -m pip install --upgrade pip && pip install -r requirements_prod.txt
 COPY backend ./backend
-COPY --from=frontend-builder /app/frontend-out ./frontend-out
+COPY --from=frontend-builder /app/frontend/out ./frontend-out
 
 ENV PORT=8080
 EXPOSE 8080
