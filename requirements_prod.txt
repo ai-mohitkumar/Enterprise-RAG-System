@@ -48,7 +48,7 @@ python-dotenv==1.0.0
 requests==2.31.0
 aiofiles==23.2.1
 tenacity==8.2.3
-tiktoken==0.5.1
+tiktoken==0.5.2
 tqdm==4.67.0
 
 ## Monitoring & Logging
