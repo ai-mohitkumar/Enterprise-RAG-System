@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+.venv/
+venv/
+
+# Local secrets / env
+.env
+.env.*
+
+# Streamlit
+.streamlit/secrets.toml
+.streamlit/.secrets.toml
+
+# Node (frontend)
+node_modules/
+.next/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build
+build/
+dist/
+
+# Local runtime data
+data/uploads/
+
